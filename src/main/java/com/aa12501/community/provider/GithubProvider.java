@@ -11,7 +11,6 @@ import java.io.IOException;
 @Component
 public class GithubProvider {
     public String getAccessToken(AccessTokenDTO accessTokenDTO) {
-        System.out.println(accessTokenDTO);
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
@@ -21,7 +20,6 @@ public class GithubProvider {
                 .build();
         try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
-            System.out.println(string);
             String token = string.split("&")[0].split("=")[1];
             return token;
         } catch (Exception e) {
@@ -38,7 +36,6 @@ public class GithubProvider {
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
-            System.out.println(string);
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
             return githubUser;
         } catch (IOException e) {
