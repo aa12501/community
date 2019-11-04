@@ -5,17 +5,12 @@ import lombok.Data;
 /**
  * 从github中获取登录人的信息
  *
- * @name    用户名
- * @id      用户id值
- * @dio     用户个性签名
- * @avatar_url  用户头像链接
- *
  */
 
 @Data
 public class GithubUser {
-    private String name;
-    private Long id;
-    private String dio;
-    private String avatar_url;
+    private String name;    //用户名
+    private Long id;        //用户id
+    private String dio;     //用户自我介绍
+    private String avatar_url;  //用户头像地址
 }
