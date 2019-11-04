@@ -8,6 +8,7 @@ body{
 .btn-publish{
     float: right;
     margin-bottom: 15px;
+    width: 55px;
 }
 
 .media-object{

@@ -3,6 +3,10 @@ package com.aa12501.community.dto;
 import com.aa12501.community.model.User;
 import lombok.Data;
 
+/**
+ * t_question表和t_user表联合查询结果
+ */
+
 @Data
 public class QuestionDTO {
     private Integer id;

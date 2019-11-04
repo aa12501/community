@@ -2,6 +2,10 @@ package com.aa12501.community.model;
 
 import lombok.Data;
 
+/**
+ * question的属性，对应数据库表t_question
+ */
+
 @Data
 public class Question {
     private Integer id;
