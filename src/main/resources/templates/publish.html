@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>aa12501</title>
+    <title>发布 - aa12501</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script src="/jq/jquery-3.4.1.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/community.css"/>
 </head>
 <body>
-
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -32,12 +31,10 @@
                     <a href="https://github.com/login/oauth/authorize?client_id=249d7176c3c270635ff6&redirect_uri=http://localhost:8887/callback?state=1">登录</a>
                 </li>
                 <li class="dropdown" th:unless="${session.user == null}">
-                    <a href="/publish">发布</a>
-                <li class="dropdown" th:unless="${session.user == null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false" th:text="${session.user.getName()}"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">消息</a></li>
+                        <li><a href="/publish">消息</a></li>
                         <li><a href="#">消息中心</a></li>
                         <li><a href="#">退出登录</a></li>
                     </ul>
@@ -45,31 +42,40 @@
             </ul>
         </div>
     </div>
-</nav>
 
+</nav>
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
             <hr>
-            <div class="media" th:each="question : ${questionList}">
-                <div class="media-left">
-                    <a href="/publish">
-                        <img class="media-object img-circle"
-                             th:src="${question.user.avatarUrl}">
-                    </a>
+            <form action="/publish" method="post">
+                <div class="form-group">
+                    <label for="title">问题标题（简单扼要）：</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题" th:value="${title}">
                 </div>
-                <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.title}"></h4>
-                    <h5 class="media-body" th:text="${question.description}"></h5><br>
-                    <span class="text-desc">
-                        <span th:text="${question.commentCount}"></span>回复 ·
-                        <span th:text="${question.viewCount}"></span>浏览 · <span th:text="${#dates.format(question.gmtCreate,'yyyy-mm-dd hh:mm:ss')}"></span></span>
+                <div class="form-group">
+                    <label for="description">问题补充（必填，请参考右侧提示）：</label>
+                    <textarea name="description" id="description" class="form-control" rows="10" th:text="${description}"></textarea>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="tag">添加标签</label>
+                    <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}" placeholder="输入标签，以空格隔开">
+                </div>
+                <div class="container-fluid main">
+                    <div class="row">
+                        <div class="alert alert-danger col-lg-9 col-md-12 col-sm-12 col-xs-12" th:if="${error != null}" th:text="${error}"></div>
+                        <button class="btn btn-success btn-publish col-lg-3 col-md-12 col-sm-12 col-xs-12"
+                                type="submit">发布
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>热门话题</h3>
+            <h3>问题发起指南</h3>
+            ·问题标题：请用简洁的语言描述您发布的问题<br/>
+            ·乱写的，我就测试一下
         </div>
 
     </div>
