@@ -1,10 +1,7 @@
 package com.aa12501.community.controller;
 
 import com.aa12501.community.dto.PaginationDTO;
-import com.aa12501.community.dto.QuestionDTO;
-import com.aa12501.community.mapper.QuestionMapper;
 import com.aa12501.community.mapper.UserMapper;
-import com.aa12501.community.model.Question;
 import com.aa12501.community.model.User;
 import com.aa12501.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class IndexController {
