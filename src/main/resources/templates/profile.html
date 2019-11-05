@@ -19,13 +19,15 @@
             <hr>
             <div class="media" th:each="question : ${pagination.questions}">
                 <div class="media-left">
-                    <a href="/publish">
+                    <a href="#">
                         <img class="media-object img-circle"
                              th:src="${question.user.avatarUrl}">
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.title}"></h4>
+                    <h4 class="media-heading">
+                        <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
+                    </h4>
                     <h5 class="media-body" th:text="${question.description}"></h5><br>
                     <span class="text-desc">
                         <span th:text="${question.commentCount}"></span>回复 ·
@@ -65,9 +67,6 @@
             <div class="list-group section">
                 <a href="/profile/questions" class="list-group-item" th:classappend="${section=='questions'}?'active':''">我的问题</a>
                 <a href="/profile/replies" class="list-group-item" th:classappend="${section=='replies'}?'active':''">最新回答</a>
-                <a href="#" class="list-group-item">Morbi leo risus</a>
-                <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                <a href="#" class="list-group-item">Vestibulum at eros</a>
             </div>
         </div>
 
