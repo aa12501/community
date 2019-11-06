@@ -19,7 +19,6 @@ public class UserService {
             userMapper.insert(user);
         }else{
             oldUser.setGmtModified(System.currentTimeMillis());
-            System.out.println(oldUser.getGmtModified());
             oldUser.setAvatarUrl(user.getAvatarUrl());
             oldUser.setToken(user.getToken());
             oldUser.setName(user.getName());
