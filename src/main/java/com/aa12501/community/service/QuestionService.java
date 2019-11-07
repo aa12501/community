@@ -5,7 +5,9 @@ import com.aa12501.community.dto.QuestionDTO;
 import com.aa12501.community.mapper.QuestionMapper;
 import com.aa12501.community.mapper.UserMapper;
 import com.aa12501.community.model.Question;
+import com.aa12501.community.model.QuestionExample;
 import com.aa12501.community.model.User;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ public class QuestionService {
 
     public PaginationDTO list(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = questionMapper.count();
+        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
         //获得总页数
         Integer totalPage;
         if (totalCount % size == 0) {
@@ -40,10 +42,10 @@ public class QuestionService {
 
         Integer offset = size * (page - 1);     //下标
         //通过下标去数据库里查找相应的几条数据
-        List<Question> questionList = questionMapper.list(offset, size);
+        List<Question> questionList = questionMapper.selectByExampleWithBLOBsWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
-            Integer id = question. getCreator();
+            Integer id = question.getCreator();
             User user = userMapper.selectByPrimaryKey(id);
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
@@ -58,7 +60,10 @@ public class QuestionService {
 
     public PaginationDTO listByUserId(Integer userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = questionMapper.countByUserId(userId);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria()
+                .andCreatorEqualTo(userId);
+        Integer totalCount = (int)questionMapper.countByExample(questionExample);
         //获得总页数
         Integer totalPage;
         if (totalCount % size == 0) {
@@ -74,10 +79,13 @@ public class QuestionService {
 
         Integer offset = size * (page - 1);     //下标
         //通过下标去数据库里查找相应的几条数据
-        List<Question> questionList = questionMapper.listByUserId(userId, offset, size);
+        QuestionExample example = new QuestionExample();
+        example.createCriteria()
+                .andCreatorEqualTo(userId);
+        List<Question> questionList = questionMapper.selectByExampleWithBLOBsWithRowbounds(example, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
-            Integer id = question. getCreator();
+            Integer id = question.getCreator();
             User user = userMapper.selectByPrimaryKey(id);
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
@@ -91,7 +99,7 @@ public class QuestionService {
     }
 
     public QuestionDTO getById(Integer id) {
-        Question question = questionMapper.getById(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
 
@@ -101,11 +109,15 @@ public class QuestionService {
         return questionDTO;
     }
 
-    public void createOrUpdate(Question question) {
+    public void createOrUpdate(Question question, User creator) {
         if (question.getId() == null) {
-            questionMapper.create(question);
-        }else{
-            questionMapper.update(question);
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setCreator(creator.getId());
+
+            questionMapper.insertSelective(question);
+
+        } else {
+            questionMapper.updateByPrimaryKeySelective(question);
         }
     }
 }
